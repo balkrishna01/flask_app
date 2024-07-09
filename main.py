@@ -94,7 +94,7 @@ def update_student(id):
 def delete_student(id):
     try:
         db.students.delete_one({'_id': ObjectId(id)})
-        return jsonify({'message': 'Student deleted sucessfully.'})
+        return jsonify({'message': 'Student deleted successfully.'})
     except Exception as e:
         return jsonify({'error': str(e)})
 
