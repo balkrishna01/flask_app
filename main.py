@@ -33,8 +33,14 @@ def get_students():
 
 @app.route('/api/v1/students/<id>', methods=['GET'])
 def get_single_student(id):
-    student = db.students.find_one({'_id': ObjectId(id)})
-    return Response(dumps(student), mimetype='application/json')
+    try:
+        student = db.students.find_one({'_id': ObjectId(id)})
+        if student:
+            return Response(dumps(student), mimetype='application/json')
+        else:
+            return jsonify({'message': 'Student not found'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)})
 
 
 @app.route('/api/v1/students', methods=['POST'])
@@ -61,6 +67,36 @@ def create_student():
         'message': 'Student record created successfully',
         'id': str(result.inserted_id)
     }), 201
+
+
+@app.route('/api/v1/students/<id>', methods=['PUT'])
+def update_student(id):
+    try:
+        data = request.form.to_dict()
+        if 'skills' in data:
+            data['skills'] = data['skills'].split(', ')
+
+        updated_student = db.students.find_one_and_update(
+            {'_id': ObjectId(id)},
+            {'$set': data},
+            return_document=pymongo.ReturnDocument.AFTER
+        )
+
+        if updated_student:
+            return Response(dumps(updated_student), mimetype='application/json')
+        else:
+            return jsonify({'message': 'Student not found'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+
+@app.route('/api/v1/student/<id>', methods=['DELETE'])
+def delete_student(id):
+    try:
+        db.students.delete_one({'_id': ObjectId(id)})
+        return jsonify({'message': 'Student deleted sucessfully.'})
+    except Exception as e:
+        return jsonify({'error': str(e)})
 
 
 if __name__ == '__main__':
