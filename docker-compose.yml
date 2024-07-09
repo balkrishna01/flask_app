@@ -1,0 +1,16 @@
+services:
+  mongodb:
+    mem_limit: 1gb
+    image: mongo:latest
+    container_name: my-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+    volumes:
+      - mongodb_data:/data/db
+
+
+volumes:
+  mongodb_data:
