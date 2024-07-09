@@ -45,28 +45,31 @@ def get_single_student(id):
 
 @app.route('/api/v1/students', methods=['POST'])
 def create_student():
-    name = request.form['name']
-    country = request.form['country']
-    city = request.form['city']
-    skills = request.form['skills'].split(', ')
-    bio = request.form['bio']
-    birth_year = request.form['birth_year']
-    created_at = datetime.now()
-    student = {
-        'name': name,
-        'country': country,
-        'city': city,
-        'birth_year': birth_year,
-        'skills': skills,
-        'bio': bio,
-        'created_at': created_at
+    try:
+        name = request.form['name']
+        country = request.form['country']
+        city = request.form['city']
+        skills = request.form['skills'].split(', ')
+        bio = request.form['bio']
+        birth_year = request.form['birth_year']
+        created_at = datetime.now()
+        student = {
+            'name': name,
+            'country': country,
+            'city': city,
+            'birth_year': birth_year,
+            'skills': skills,
+            'bio': bio,
+            'created_at': created_at
 
-    }
-    result = db.students.insert_one(student)
-    return jsonify({
-        'message': 'Student record created successfully',
-        'id': str(result.inserted_id)
-    }), 201
+        }
+        result = db.students.insert_one(student)
+        return jsonify({
+            'message': 'Student record created successfully',
+            'id': str(result.inserted_id)
+        }), 201
+    except Exception as e:
+        return jsonify({'error': str(e)})
 
 
 @app.route('/api/v1/students/<id>', methods=['PUT'])
