@@ -4,12 +4,13 @@ from bson.json_util import dumps
 import pymongo
 import json
 from datetime import datetime
+from config import Config
 
 app = Flask(__name__)
 
 # mongodb://mongo:mongo@localhost:27017/
-MONGODB_URI = 'mongodb://mongo:mongo@localhost:27017/'
-client = pymongo.MongoClient(MONGODB_URI)
+# MONGODB_URI = 'mongodb://mongo:mongo@localhost:27017/'
+client = pymongo.MongoClient(Config.MONGODB_URI)
 
 # Creating database
 db = client.my_mongo_db
