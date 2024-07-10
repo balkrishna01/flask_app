@@ -3,12 +3,15 @@ from bson.objectid import ObjectId
 from bson.json_util import dumps
 import pymongo
 from datetime import datetime
-from config import Config
+from src.db.mongo_connection import get_db
 
-client = pymongo.MongoClient(Config.MONGODB_URI)
-db = client.my_mongo_db
+db = get_db()
+
+# client = pymongo.MongoClient(Config.MONGODB_URI)
+# db = client.my_mongo_db
 
 api_bp = Blueprint('api', __name__)
+
 
 @api_bp.route('/api/v1/test', methods=['GET'])
 def test_db_connection():
