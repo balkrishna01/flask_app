@@ -20,13 +20,16 @@ def test_db_connection():
         db.command('ping')
         return jsonify({'message': 'Database connection successful'}), 200
     except Exception as e:
-        return jsonify({'message': 'Database connection failed', 'error': str(e)}), 500
+        return jsonify({'message': 'Database connection failed', 'error': str(e)})
 
 
 @api_bp.route('/api/v1/students', methods=['GET'])
 def get_students():
-    students = db.students.find()
-    return Response(dumps(students), mimetype='application/json')
+    try:
+        students = db.students.find()
+        return Response(dumps(students), mimetype='application/json')
+    except Exception as e:
+        return jsonify({'error': str(e)})
 
 
 @api_bp.route('/api/v1/students/<id>', methods=['GET'])
